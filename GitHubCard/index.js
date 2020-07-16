@@ -3,7 +3,6 @@
     (replacing the placeholder with your Github name):
     https://api.github.com/users/<your name>
 */
-
 /*
   STEP 2: Inspect and study the data coming back, this is YOUR
     github info! You will need to understand the structure of this
@@ -27,8 +26,13 @@
     Using that array, iterate over it, requesting data for each user, creating a new card for each
     user, and adding that card to the DOM.
 */
-
-const followersArray = [];
+	const followersArray = [
+	"https://api.github.com/users/tetondan",
+	"https://api.github.com/users/dustinmyers",
+	"https://api.github.com/users/justsml",
+	"https://api.github.com/users/luishrd",
+	"https://api.github.com/users/bigknell",
+	];
 
 /*
   STEP 3: Create a function that accepts a single object as its only argument.
@@ -49,7 +53,62 @@ const followersArray = [];
       </div>
     </div>
 */
+const myBod = document.querySelector('.cards');
+function myProfile(me){
+	const card = document.createElement('div');
+	card.classList.add('card');
+	const myImg = document.createElement('img');
+	myImg.setAttribute('src', me.data.avatar_url);
+	const cardInfo = document.createElement('div');
+	cardInfo.classList.add('card-info');
+	const h3 = document.createElement('h3');
+	h3.classList.add('name');
+	h3.textContent = ` Name: ${me.data.name}`;
+	const username = document.createElement('p');
+	username.classList.add('username');
+	username.textContent =` Username: ${me.data.login}`;
+	const location = document.createElement('p');
+	location.textContent = `Location: ${me.data.location}`;
+	const profile = document.createElement('p');
+	profile.textContent = "Profile:";
+	const profA = document.createElement('a');
+	profA.setAttribute('href', me.data.url);
+	profA.textContent = `${me.data.url}`;
+	const followers = document.createElement('p');
+	const following = document.createElement('p');
+	followers.textContent = ` Followers : ${me.data.followers}`;
+	following.textContent =` Following : ${me.data.following}`;
+	profile.appendChild(profA)
+	const bio = document.createElement('p');
+	bio.textContent = me.data.bio;
+	cardInfo.append(h3,username,location,profile,followers,following,bio);
+	card.appendChild(myImg);
+	card.appendChild(cardInfo);	
+	return card
+}
 
+axios.get('https://api.github.com/users/danielterry2121')
+	.then(function(response) {
+		console.log(response);
+			const myCard = myProfile(response);
+			myBod.appendChild(myCard);
+		
+	})
+	.catch(function (error) {
+		console.log(error);
+	});
+	followersArray.forEach(person => {
+	axios.get(person)
+	.then(function(response) {
+		console.log(response);
+		const myCard = myProfile(response);
+			myBod.appendChild(myCard);
+		
+	})
+	.catch(function (error) {
+		console.log(error);
+	});
+	})
 /*
   List of LS Instructors Github username's:
     tetondan
